@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-// import shortid from 'shortid';
 import Container from './components/Container';
-// import Filter from './components/Filter';
 import Clock from './components/Clock';
-// import Title from './components/Title';
-// import MainTitle from './components/MainTitle';
 // import Modal from './components/Modal';
-// import IconButton from './components/IconButton';
-// import { ReactComponent as AddIcon } from './icons/add.svg';
-// import FlexWrapper from './components/FlexWrapper';
+import fetchImages from './services/images-api';
+
+fetchImages('sun', 1).then(console.log());
 
 class App extends Component {
   state = {};
