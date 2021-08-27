@@ -5,6 +5,7 @@ import ImageGallery from './components/ImageGallery';
 // import Modal from './components/Modal';
 import imageAPI from './services/images-api';
 import Button from './components/Button';
+import Loading from './components/Loader';
 import './App.scss';
 
 class App extends Component {
@@ -12,6 +13,7 @@ class App extends Component {
     searchQuery: '',
     page: 1,
     images: [],
+    loading: false,
   };
 
   componentDidMount() {}
@@ -24,18 +26,29 @@ class App extends Component {
     const prevImages = prevState.images;
 
     if (prevSearchQuerry !== nextSearchQuerry) {
-      imageAPI(nextSearchQuerry, nextpage).then((images) =>
-        this.setState({ images })
-      );
+      this.setState({ loading: true });
+
+      setTimeout(() => {
+        imageAPI(nextSearchQuerry, nextpage)
+          .then((images) => this.setState({ images }))
+          .finally(this.setState({ loading: false }));
+      }, 500);
     }
 
     if (prevPage !== nextpage) {
       if (nextpage === 1) {
         return;
       }
-      imageAPI(prevSearchQuerry, nextpage).then((images) => {
-        this.setState({ images: [...prevImages, ...images] });
-      });
+
+      this.setState({ loading: true });
+
+      setTimeout(() => {
+        imageAPI(prevSearchQuerry, nextpage)
+          .then((images) => {
+            this.setState({ images: [...prevImages, ...images] });
+          })
+          .finally(this.setState({ loading: false }));
+      }, 500);
     }
 
     window.scrollTo({
@@ -66,7 +79,8 @@ class App extends Component {
       <main className="app">
         <Searchbar onSubmit={this.getSearchQuerry} resetPage={this.resetPage} />
         <ImageGallery images={images} />
-        {images.length && <Button page={this.pageIncrement} />}
+        {this.state.loading && <Loading />}
+        {images.length ? <Button page={this.pageIncrement} /> : null}
       </main>
     );
   }
