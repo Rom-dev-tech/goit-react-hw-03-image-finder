@@ -1,28 +1,31 @@
 import React, { Component } from 'react';
-import Container from './components/Container';
-import Clock from './components/Clock';
+// import Clock from './components/Clock';
 // import Modal from './components/Modal';
-import fetchImages from './services/images-api';
+// import fetchImages from './services/images-api';
+import Searchbar from './components/Searchbar';
 
-fetchImages('sun', 1).then(console.log());
+// fetchImages('sun', 1).then(console.log());
 
 class App extends Component {
-  state = {};
+  state = {
+    searchQuery: '',
+  };
 
   componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState) {}
 
-  changeFilter = (event) => {};
+  getSearchQuerry = (searchQuery) => {
+    this.setState({ searchQuery });
+  };
 
   toggleModal = () => {};
 
   render() {
     return (
-      <Container>
-        <Clock direction="center" size={30} />
-        <h1>Lets Start</h1>
-      </Container>
+      <>
+        <Searchbar onSubmit={this.getSearchQuerry} />
+      </>
     );
   }
 }
