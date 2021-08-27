@@ -4,6 +4,7 @@ import ImageGallery from './components/ImageGallery';
 // import Clock from './components/Clock';
 // import Modal from './components/Modal';
 import imageAPI from './services/images-api';
+import Button from './components/Button';
 import './App.scss';
 
 class App extends Component {
@@ -64,7 +65,8 @@ class App extends Component {
     return (
       <main className="app">
         <Searchbar onSubmit={this.getSearchQuerry} resetPage={this.resetPage} />
-        <ImageGallery images={images} page={this.pageIncrement} />
+        <ImageGallery images={images} />
+        {images.length && <Button page={this.pageIncrement} />}
       </main>
     );
   }
