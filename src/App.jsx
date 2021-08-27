@@ -6,8 +6,6 @@ import ImageGallery from './components/ImageGallery';
 import imageAPI from './services/images-api';
 import './App.scss';
 
-// fetchImages('sun', 1).then(console.log());
-
 class App extends Component {
   state = {
     searchQuery: '',
@@ -20,17 +18,33 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     const prevSearchQuerry = prevState.searchQuery;
     const nextSearchQuerry = this.state.searchQuery;
-    const page = this.state.page;
+    const prevPage = prevState.page;
+    const nextpage = this.state.page;
 
     if (prevSearchQuerry !== nextSearchQuerry) {
-      imageAPI(nextSearchQuerry, page).then((images) =>
+      imageAPI(nextSearchQuerry, nextpage).then((images) =>
+        this.setState({ images })
+      );
+    }
+
+    if (prevPage !== nextpage) {
+      imageAPI(prevSearchQuerry, nextpage).then((images) =>
         this.setState({ images })
       );
     }
   }
 
+  resetPage() {
+    this.setState({ page: 1 });
+  }
+
   getSearchQuerry = (searchQuery) => {
     this.setState({ searchQuery });
+    this.resetPage();
+  };
+
+  pageIncrement = () => {
+    this.setState({ page: this.state.page + 1 });
   };
 
   toggleModal = () => {};
@@ -40,7 +54,7 @@ class App extends Component {
     return (
       <main className="app">
         <Searchbar onSubmit={this.getSearchQuerry} />
-        <ImageGallery images={images} />
+        <ImageGallery images={images} page={this.pageIncrement} />
       </main>
     );
   }

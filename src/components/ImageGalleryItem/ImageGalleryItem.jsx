@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import '../ImageGalleryItem/ImageGalleryItem.scss';
 
 const ImageGalleryItem = ({ images }) => {
-  console.log(images);
   return (
     <>
       {images.map((image) => (
