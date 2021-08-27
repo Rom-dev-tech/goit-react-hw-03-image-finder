@@ -36,6 +36,8 @@ class App extends Component {
     const prevImages = prevState.images;
     const prevmodalImage = prevState.modalImage;
     const nextmodalImage = this.state.modalImage;
+    const prevShowModal = prevState.showModal;
+    const nextshowModal = this.state.showModal;
 
     if (prevmodalImage !== nextmodalImage) {
       return;
@@ -65,7 +67,9 @@ class App extends Component {
         .finally(this.toggleIsLoading);
     }
 
-    this.scroll();
+    if (!prevShowModal && !nextshowModal) {
+      this.scroll();
+    }
   }
 
   getSearchQuerry = (searchQuery) => this.setState({ searchQuery });
