@@ -21,15 +21,6 @@ const fetchImages = async (searchQuerry, page) => {
   }
 
   return Promise.reject(new Error(`Нет картинок с именем ${searchQuerry}`));
-
-  // return fetch(url)
-  //   .then((response) => response.json())
-  //   .then((responseObj) => {
-  //     if (responseObj.hits !== 0) {
-  //       return responseObj.hits;
-  //     }
-  //     return Promise.reject(new Error(`Нет картинок с именем ${searchQuerry}`));
-  //   });
 };
 
 export default fetchImages;

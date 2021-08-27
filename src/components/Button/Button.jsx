@@ -3,9 +3,11 @@ import '../Button/Button.scss';
 
 const Button = ({ page }) => {
   return (
-    <button type="button" className="button" onClick={page}>
-      Load more
-    </button>
+    <>
+      <button type="button" className="button" onClick={page}>
+        Load more
+      </button>
+    </>
   );
 };
 

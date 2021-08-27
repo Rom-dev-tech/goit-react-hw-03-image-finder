@@ -20,6 +20,7 @@ class Searchbar extends Component {
 
     this.props.onSubmit(this.state.searchQuery);
     this.setState({ searchQuery: '' });
+    this.props.resetPage();
   };
 
   render() {
@@ -47,6 +48,7 @@ class Searchbar extends Component {
 
 Searchbar.propTypes = {
   onSubmit: PropTypes.func,
+  resetPage: PropTypes.func,
 };
 
 export default Searchbar;

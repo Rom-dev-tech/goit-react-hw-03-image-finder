@@ -20,6 +20,7 @@ class App extends Component {
     const nextSearchQuerry = this.state.searchQuery;
     const prevPage = prevState.page;
     const nextpage = this.state.page;
+    const prevImages = prevState.images;
 
     if (prevSearchQuerry !== nextSearchQuerry) {
       imageAPI(nextSearchQuerry, nextpage).then((images) =>
@@ -28,23 +29,32 @@ class App extends Component {
     }
 
     if (prevPage !== nextpage) {
-      imageAPI(prevSearchQuerry, nextpage).then((images) =>
-        this.setState({ images })
-      );
+      if (nextpage === 1) {
+        return;
+      }
+      imageAPI(prevSearchQuerry, nextpage).then((images) => {
+        this.setState({ images: [...prevImages, ...images] });
+      });
     }
-  }
 
-  resetPage() {
-    this.setState({ page: 1 });
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   }
 
   getSearchQuerry = (searchQuery) => {
     this.setState({ searchQuery });
-    this.resetPage();
   };
 
   pageIncrement = () => {
-    this.setState({ page: this.state.page + 1 });
+    this.setState((prevState) => ({
+      page: prevState.page + 1,
+    }));
+  };
+
+  resetPage = () => {
+    this.setState({ page: 1 });
   };
 
   toggleModal = () => {};
@@ -53,7 +63,7 @@ class App extends Component {
     const { images } = this.state;
     return (
       <main className="app">
-        <Searchbar onSubmit={this.getSearchQuerry} />
+        <Searchbar onSubmit={this.getSearchQuerry} resetPage={this.resetPage} />
         <ImageGallery images={images} page={this.pageIncrement} />
       </main>
     );
