@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import Searchbar from './components/Searchbar';
 // import Clock from './components/Clock';
 // import Modal from './components/Modal';
 // import fetchImages from './services/images-api';
-import Searchbar from './components/Searchbar';
 
 // fetchImages('sun', 1).then(console.log());
 

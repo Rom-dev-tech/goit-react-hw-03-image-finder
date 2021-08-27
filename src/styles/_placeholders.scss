@@ -4,21 +4,21 @@
   list-style: none;
 }
 
-%button {
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
+// %button {
+//   font: inherit;
+//   color: inherit;
+//   cursor: pointer;
 
-  border-radius: 4px;
-  border: 1px solid $grey;
-  background-color: transparent;
-  font-size: 14px;
-  padding: 5px;
+//   border-radius: 4px;
+//   border: 1px solid $grey;
+//   background-color: transparent;
+//   font-size: 14px;
+//   padding: 5px;
 
-  transition: background-color $timing-function;
+//   transition: background-color $timing-function;
 
-  &:hover,
-  &:focus {
-    background-color: $indigo;
-  }
-}
+//   &:hover,
+//   &:focus {
+//     background-color: $indigo;
+//   }
+// }
