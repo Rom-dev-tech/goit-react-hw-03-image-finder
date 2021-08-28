@@ -6,10 +6,10 @@ const Loading = () => {
   return (
     <Loader
       className="loader"
-      type="Audio"
+      type="Circles"
       color="#303f9f"
-      height={70}
-      width={70}
+      height={100}
+      width={100}
       timeout={500}
     />
   );

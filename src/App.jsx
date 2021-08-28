@@ -6,6 +6,7 @@ import imageAPI from './services/images-api';
 import Button from './components/Button';
 import Loading from './components/Loader';
 import Modal from './components/Modal';
+import Notification from './components/Notification';
 import './App.scss';
 
 class App extends Component {
@@ -17,6 +18,7 @@ class App extends Component {
     showModal: false,
     modalImage: '',
     modalImageAlt: '',
+    error: null,
   };
 
   scroll() {
@@ -45,10 +47,12 @@ class App extends Component {
 
     if (prevSearchQuerry !== nextSearchQuerry) {
       this.toggleIsLoading();
+      this.setState({ images: [], error: null });
 
       setTimeout(() => {
         imageAPI(nextSearchQuerry, nextpage)
           .then((images) => this.setState({ images }))
+          .catch((error) => this.setState({ error }))
           .finally(this.toggleIsLoading);
       }, 300);
     }
@@ -60,11 +64,13 @@ class App extends Component {
     if (prevPage !== nextpage) {
       this.toggleIsLoading();
 
-      imageAPI(prevSearchQuerry, nextpage)
-        .then((images) => {
-          this.setState({ images: [...prevImages, ...images] });
-        })
-        .finally(this.toggleIsLoading);
+      setTimeout(() => {
+        imageAPI(prevSearchQuerry, nextpage)
+          .then((images) => {
+            this.setState({ images: [...prevImages, ...images] });
+          })
+          .finally(this.toggleIsLoading);
+      }, 300);
     }
 
     if (!prevShowModal && !nextshowModal) {
@@ -104,12 +110,14 @@ class App extends Component {
   };
 
   render() {
-    const { images, showModal, modalImage, modalImageAlt } = this.state;
+    const { images, showModal, modalImage, modalImageAlt, error, isLoading } =
+      this.state;
     return (
       <main className="app">
         <Searchbar onSubmit={this.getSearchQuerry} resetPage={this.resetPage} />
+        {error && <Notification message={error.message} />}
         <ImageGallery images={images} openModal={this.openModal} />
-        {this.state.isLoading && <Loading />}
+        {isLoading && <Loading />}
         {images.length ? <Button page={this.pageIncrement} /> : null}
         {showModal && (
           <Modal
