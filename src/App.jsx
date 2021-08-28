@@ -11,7 +11,7 @@ import './App.scss';
 
 class App extends Component {
   state = {
-    searchQuery: '',
+    searchQuery: null,
     page: 1,
     images: [],
     isLoading: false,
@@ -49,12 +49,20 @@ class App extends Component {
       this.toggleIsLoading();
       this.setState({ images: [], error: null });
 
-      setTimeout(() => {
-        imageAPI(nextSearchQuerry, nextpage)
-          .then((images) => this.setState({ images }))
-          .catch((error) => this.setState({ error }))
-          .finally(this.toggleIsLoading);
-      }, 300);
+      if (nextSearchQuerry === '') {
+        setTimeout(() => {
+          this.setState({
+            error: { message: 'Ops, empty. Please enter something...' },
+          });
+          this.toggleIsLoading();
+        }, 500);
+        return;
+      }
+
+      imageAPI(nextSearchQuerry, nextpage)
+        .then((images) => this.setState({ images }))
+        .catch((error) => this.setState({ error }))
+        .finally(this.toggleIsLoading);
     }
 
     if (nextpage === 1) {
@@ -64,13 +72,11 @@ class App extends Component {
     if (prevPage !== nextpage) {
       this.toggleIsLoading();
 
-      setTimeout(() => {
-        imageAPI(prevSearchQuerry, nextpage)
-          .then((images) => {
-            this.setState({ images: [...prevImages, ...images] });
-          })
-          .finally(this.toggleIsLoading);
-      }, 300);
+      imageAPI(prevSearchQuerry, nextpage)
+        .then((images) => {
+          this.setState({ images: [...prevImages, ...images] });
+        })
+        .finally(this.toggleIsLoading);
     }
 
     if (!prevShowModal && !nextshowModal) {

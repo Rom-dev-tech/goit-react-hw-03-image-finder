@@ -1,3 +1,4 @@
+import React from 'react';
 import '../Notification/Notification.scss';
 
 const Notification = ({ message }) => (

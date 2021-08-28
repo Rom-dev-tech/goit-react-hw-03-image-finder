@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import '../ImageGalleryItem/ImageGalleryItem.scss';
 import defaultImage from '../../images/default.jpg';

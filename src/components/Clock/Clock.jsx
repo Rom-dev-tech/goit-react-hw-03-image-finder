@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import './Clock.scss';
 
 export default class Clock extends Component {
+  static propTypes = {
+    direction: PropTypes.string.isRequired,
+    size: PropTypes.number.isRequired,
+  };
+
   state = {
     time: new Date().toLocaleTimeString(),
   };
@@ -32,8 +37,3 @@ export default class Clock extends Component {
     );
   }
 }
-
-Clock.propTypes = {
-  direction: PropTypes.string.isRequired,
-  size: PropTypes.number.isRequired,
-};

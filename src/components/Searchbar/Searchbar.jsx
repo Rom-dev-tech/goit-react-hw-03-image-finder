@@ -3,19 +3,27 @@ import PropTypes from 'prop-types';
 import '../Searchbar/Searchbar.scss';
 
 class Searchbar extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+    resetPage: PropTypes.func.isRequired,
+    // getError: PropTypes.func.isRequired,
+  };
   state = {
     searchQuery: '',
   };
 
   handleSearchChange = (event) => {
-    this.setState({ searchQuery: event.currentTarget.value.toLowerCase() });
+    this.setState({
+      searchQuery: event.currentTarget.value.toLowerCase(),
+    });
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
 
     if (this.state.searchQuery.trim() === '') {
-      return alert('Enter something ...');
+      this.props.onSubmit(this.state.searchQuery.trim());
+      return;
     }
 
     this.props.onSubmit(this.state.searchQuery);
@@ -45,10 +53,5 @@ class Searchbar extends Component {
     );
   }
 }
-
-Searchbar.propTypes = {
-  onSubmit: PropTypes.func,
-  resetPage: PropTypes.func,
-};
 
 export default Searchbar;

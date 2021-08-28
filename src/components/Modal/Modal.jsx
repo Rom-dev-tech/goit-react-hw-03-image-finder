@@ -6,6 +6,12 @@ import './Modal.scss';
 const modalRoot = document.querySelector('#modal-root');
 
 export default class Modal extends Component {
+  static propTypes = {
+    closeModal: PropTypes.func.isRequired,
+    modalImage: PropTypes.string.isRequired,
+    modalImageAlt: PropTypes.string.isRequired,
+  };
+
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
   }
@@ -41,9 +47,3 @@ export default class Modal extends Component {
     );
   }
 }
-
-Modal.propTypes = {
-  closeModal: PropTypes.func.isRequired,
-  modalImage: PropTypes.string.isRequired,
-  modalImageAlt: PropTypes.string.isRequired,
-};
