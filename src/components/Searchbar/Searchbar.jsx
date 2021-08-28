@@ -15,7 +15,7 @@ class Searchbar extends Component {
     event.preventDefault();
 
     if (this.state.searchQuery.trim() === '') {
-      return alert('Enter search');
+      return alert('Enter something ...');
     }
 
     this.props.onSubmit(this.state.searchQuery);
