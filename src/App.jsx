@@ -76,6 +76,12 @@ class App extends Component {
         .then((images) => {
           this.setState({ images: [...prevImages, ...images] });
         })
+        .catch((error) =>
+          this.setState({
+            images: [],
+            error: { message: 'Sorry, no more pictures ...' },
+          })
+        )
         .finally(this.toggleIsLoading);
     }
 
@@ -124,7 +130,7 @@ class App extends Component {
         {error && <Notification message={error.message} />}
         <ImageGallery images={images} openModal={this.openModal} />
         {isLoading && <Loading />}
-        {images.length ? <Button page={this.pageIncrement} /> : null}
+        {images.length >= 12 ? <Button page={this.pageIncrement} /> : null}
         {showModal && (
           <Modal
             closeModal={this.closeModal}
