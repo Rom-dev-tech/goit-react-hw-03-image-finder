@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery';
-// import Clock from './components/Clock';
 import imageAPI from './services/images-api';
 import Button from './components/Button';
 import Loading from './components/Loader';
@@ -122,6 +121,11 @@ class App extends Component {
     }));
   };
 
+  cleareImages = () => {
+    this.setState({ images: [] });
+    this.setState({ startAbout: true });
+  };
+
   render() {
     const {
       images,
@@ -135,7 +139,11 @@ class App extends Component {
     } = this.state;
     return (
       <main className="app">
-        <Searchbar onSubmit={this.getSearchQuerry} resetPage={this.resetPage} />
+        <Searchbar
+          onSubmit={this.getSearchQuerry}
+          resetPage={this.resetPage}
+          cleareImages={this.cleareImages}
+        />
 
         {error && <Notification message={error.message} />}
 

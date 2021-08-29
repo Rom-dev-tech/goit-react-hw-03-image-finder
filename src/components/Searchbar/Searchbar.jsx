@@ -6,6 +6,7 @@ class Searchbar extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
     resetPage: PropTypes.func.isRequired,
+    cleareImages: PropTypes.func.isRequired,
   };
   state = {
     searchQuery: '',
@@ -49,6 +50,12 @@ class Searchbar extends Component {
             placeholder="Search images and photos"
           />
         </form>
+
+        <button
+          className="clear__button"
+          type="button"
+          onClick={this.props.cleareImages}
+        ></button>
       </header>
     );
   }
