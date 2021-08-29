@@ -20,7 +20,6 @@ class App extends Component {
     modalImageAlt: '',
     error: null,
     startAbout: true,
-    isModalLoading: true,
   };
 
   scroll() {
@@ -135,7 +134,6 @@ class App extends Component {
       error,
       isLoading,
       startAbout,
-      isModalLoading,
     } = this.state;
     return (
       <main className="app">
@@ -159,7 +157,6 @@ class App extends Component {
 
         {showModal && (
           <Modal
-            isModalLoading={isModalLoading}
             closeModal={this.closeModal}
             modalImage={modalImage}
             modalImageAlt={modalImageAlt}

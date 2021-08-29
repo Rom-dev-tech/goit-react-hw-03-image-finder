@@ -11,11 +11,10 @@ export default class Modal extends Component {
     closeModal: PropTypes.func.isRequired,
     modalImage: PropTypes.string.isRequired,
     modalImageAlt: PropTypes.string.isRequired,
-    isModalLoading: PropTypes.bool,
   };
 
   state = {
-    isLoading: this.props.isModalLoading,
+    isLoading: true,
   };
 
   componentDidMount() {
