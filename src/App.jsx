@@ -7,6 +7,7 @@ import Button from './components/Button';
 import Loading from './components/Loader';
 import Modal from './components/Modal';
 import Notification from './components/Notification';
+import AboutAppInfo from './components/AboutAppInfo';
 import './App.scss';
 
 class App extends Component {
@@ -19,6 +20,7 @@ class App extends Component {
     modalImage: '',
     modalImageAlt: '',
     error: null,
+    startAbout: true,
   };
 
   scroll() {
@@ -47,7 +49,7 @@ class App extends Component {
 
     if (prevSearchQuerry !== nextSearchQuerry) {
       this.toggleIsLoading();
-      this.setState({ images: [], error: null });
+      this.setState({ images: [], error: null, startAbout: false });
 
       if (nextSearchQuerry === '') {
         setTimeout(() => {
@@ -122,13 +124,24 @@ class App extends Component {
   };
 
   render() {
-    const { images, showModal, modalImage, modalImageAlt, error, isLoading } =
-      this.state;
+    const {
+      images,
+      showModal,
+      modalImage,
+      modalImageAlt,
+      error,
+      isLoading,
+      startAbout,
+    } = this.state;
     return (
       <main className="app">
         <Searchbar onSubmit={this.getSearchQuerry} resetPage={this.resetPage} />
         {error && <Notification message={error.message} />}
-        <ImageGallery images={images} openModal={this.openModal} />
+        {startAbout ? (
+          <AboutAppInfo />
+        ) : (
+          <ImageGallery images={images} openModal={this.openModal} />
+        )}
         {isLoading && <Loading />}
         {images.length >= 12 ? <Button page={this.pageIncrement} /> : null}
         {showModal && (

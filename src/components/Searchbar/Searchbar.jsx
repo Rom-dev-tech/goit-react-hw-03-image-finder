@@ -40,6 +40,7 @@ class Searchbar extends Component {
           </button>
 
           <input
+            id="anchor"
             className="searchform__input"
             type="text"
             value={this.state.searchQuery}
