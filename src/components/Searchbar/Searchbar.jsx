@@ -6,7 +6,6 @@ class Searchbar extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
     resetPage: PropTypes.func.isRequired,
-    // getError: PropTypes.func.isRequired,
   };
   state = {
     searchQuery: '',

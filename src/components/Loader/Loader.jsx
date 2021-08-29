@@ -11,7 +11,7 @@ const Loading = () => {
       color="#303f9f"
       height={100}
       width={100}
-      timeout={500}
+      // timeout={500}
     />
   );
 };
