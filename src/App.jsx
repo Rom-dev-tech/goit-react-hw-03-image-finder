@@ -9,6 +9,13 @@ import Notification from './components/Notification';
 import AboutAppInfo from './components/AboutAppInfo';
 import './App.scss';
 
+const Status = {
+  IDLE: 'idle',
+  PENDING: 'pending',
+  RESOLVED: 'resolved',
+  REJECTED: 'rejected',
+};
+
 class App extends Component {
   state = {
     searchQuery: null,
@@ -18,7 +25,7 @@ class App extends Component {
     modalImage: '',
     modalImageAlt: '',
     error: null,
-    status: 'idle',
+    status: Status.IDLE,
   };
 
   scroll() {
@@ -44,7 +51,7 @@ class App extends Component {
     }
 
     if (prevSearchQuerry !== nextSearchQuerry) {
-      this.setState({ status: 'pending', images: [] });
+      this.setState({ status: Status.PENDING, images: [] });
 
       if (nextSearchQuerry === '') {
         setTimeout(() => {
@@ -52,15 +59,15 @@ class App extends Component {
             error: {
               message: 'Ops, empty. Please enter something...',
             },
-            status: 'rejected',
+            status: Status.REJECTED,
           });
         }, 500);
         return;
       }
 
       imageAPI(nextSearchQuerry, nextpage)
-        .then((images) => this.setState({ images, status: 'resolved' }))
-        .catch((error) => this.setState({ error, status: 'rejected' }));
+        .then((images) => this.setState({ images, status: Status.RESOLVED }))
+        .catch((error) => this.setState({ error, status: Status.REJECTED }));
     }
 
     if (nextpage === 1) {
@@ -68,13 +75,13 @@ class App extends Component {
     }
 
     if (prevPage !== nextpage) {
-      this.setState({ status: 'pending' });
+      this.setState({ status: Status.PENDING });
 
       imageAPI(prevSearchQuerry, nextpage)
         .then((images) => {
           this.setState({
             images: [...prevImages, ...images],
-            status: 'resolved',
+            status: Status.RESOLVED,
           });
         })
         .catch((error) =>
@@ -82,7 +89,7 @@ class App extends Component {
             images: [],
             error: {
               message: 'Sorry, no more pictures ...',
-              status: 'rejected',
+              status: Status.REJECTED,
             },
           })
         );
@@ -122,7 +129,7 @@ class App extends Component {
   };
 
   cleareImages = () => {
-    this.setState({ images: [], status: 'idle' });
+    this.setState({ images: [], status: Status.IDLE });
   };
 
   render() {
