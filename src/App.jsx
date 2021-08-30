@@ -14,12 +14,11 @@ class App extends Component {
     searchQuery: null,
     page: 1,
     images: [],
-    isLoading: false,
     showModal: false,
     modalImage: '',
     modalImageAlt: '',
     error: null,
-    startAbout: true,
+    status: 'idle',
   };
 
   scroll() {
@@ -45,23 +44,23 @@ class App extends Component {
     }
 
     if (prevSearchQuerry !== nextSearchQuerry) {
-      this.toggleIsLoading();
-      this.setState({ images: [], error: null, startAbout: false });
+      this.setState({ status: 'pending', images: [] });
 
       if (nextSearchQuerry === '') {
         setTimeout(() => {
           this.setState({
-            error: { message: 'Ops, empty. Please enter something...' },
+            error: {
+              message: 'Ops, empty. Please enter something...',
+            },
+            status: 'rejected',
           });
-          this.toggleIsLoading();
         }, 500);
         return;
       }
 
       imageAPI(nextSearchQuerry, nextpage)
-        .then((images) => this.setState({ images }))
-        .catch((error) => this.setState({ error }))
-        .finally(this.toggleIsLoading);
+        .then((images) => this.setState({ images, status: 'resolved' }))
+        .catch((error) => this.setState({ error, status: 'rejected' }));
     }
 
     if (nextpage === 1) {
@@ -69,19 +68,24 @@ class App extends Component {
     }
 
     if (prevPage !== nextpage) {
-      this.toggleIsLoading();
+      this.setState({ status: 'pending' });
 
       imageAPI(prevSearchQuerry, nextpage)
         .then((images) => {
-          this.setState({ images: [...prevImages, ...images] });
+          this.setState({
+            images: [...prevImages, ...images],
+            status: 'resolved',
+          });
         })
         .catch((error) =>
           this.setState({
             images: [],
-            error: { message: 'Sorry, no more pictures ...' },
+            error: {
+              message: 'Sorry, no more pictures ...',
+              status: 'rejected',
+            },
           })
-        )
-        .finally(this.toggleIsLoading);
+        );
     }
 
     if (!prevShowModal && !nextshowModal) {
@@ -95,9 +99,6 @@ class App extends Component {
     this.setState((prevState) => ({ page: prevState.page + 1 }));
 
   resetPage = () => this.setState({ page: 1 });
-
-  toggleIsLoading = () =>
-    this.setState(({ isLoading }) => ({ isLoading: !isLoading }));
 
   toggleModal = () =>
     this.setState(({ showModal }) => ({ showModal: !showModal }));
@@ -121,49 +122,78 @@ class App extends Component {
   };
 
   cleareImages = () => {
-    this.setState({ images: [] });
-    this.setState({ startAbout: true });
+    this.setState({ images: [], status: 'idle' });
   };
 
   render() {
-    const {
-      images,
-      showModal,
-      modalImage,
-      modalImageAlt,
-      error,
-      isLoading,
-      startAbout,
-    } = this.state;
-    return (
-      <main className="app">
-        <Searchbar
-          onSubmit={this.getSearchQuerry}
-          resetPage={this.resetPage}
-          cleareImages={this.cleareImages}
-        />
+    const { images, showModal, modalImage, modalImageAlt, error, status } =
+      this.state;
 
-        {error && <Notification message={error.message} />}
-
-        {startAbout ? (
-          <AboutAppInfo />
-        ) : (
-          <ImageGallery images={images} openModal={this.openModal} />
-        )}
-
-        {isLoading && <Loading />}
-
-        {images.length >= 12 ? <Button page={this.pageIncrement} /> : null}
-
-        {showModal && (
-          <Modal
-            closeModal={this.closeModal}
-            modalImage={modalImage}
-            modalImageAlt={modalImageAlt}
+    if (status === 'idle') {
+      return (
+        <>
+          <Searchbar
+            onSubmit={this.getSearchQuerry}
+            resetPage={this.resetPage}
+            cleareImages={this.cleareImages}
           />
-        )}
-      </main>
-    );
+          <AboutAppInfo />
+        </>
+      );
+    }
+
+    if (status === 'pending') {
+      return (
+        <>
+          <div className="app">
+            <Searchbar
+              onSubmit={this.getSearchQuerry}
+              resetPage={this.resetPage}
+              cleareImages={this.cleareImages}
+            />
+            <ImageGallery images={images} openModal={this.openModal} />
+            <Loading />
+          </div>
+        </>
+      );
+    }
+
+    if (status === 'rejected') {
+      return (
+        <>
+          <Searchbar
+            onSubmit={this.getSearchQuerry}
+            resetPage={this.resetPage}
+            cleareImages={this.cleareImages}
+          />
+          <Notification message={error.message} />
+        </>
+      );
+    }
+
+    if (status === 'resolved') {
+      return (
+        <>
+          <div className="app">
+            <Searchbar
+              onSubmit={this.getSearchQuerry}
+              resetPage={this.resetPage}
+              cleareImages={this.cleareImages}
+            />
+
+            <ImageGallery images={images} openModal={this.openModal} />
+            {images.length >= 12 ? <Button page={this.pageIncrement} /> : null}
+            {showModal && (
+              <Modal
+                closeModal={this.closeModal}
+                modalImage={modalImage}
+                modalImageAlt={modalImageAlt}
+              />
+            )}
+          </div>
+        </>
+      );
+    }
   }
 }
 
