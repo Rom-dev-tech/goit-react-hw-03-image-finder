@@ -38,23 +38,16 @@ class ImagesView extends Component {
     const prevToggleClearStartPage = prevProps.toggleClearPage;
     const nextToggleClearStartPage = this.props.toggleClearPage;
     const prevPage = prevState.page;
-    const nextpage = this.state.page;
-    const prevImages = prevState.images;
-    const prevmodalImage = prevState.modalImage;
-    const nextmodalImage = this.state.modalImage;
+    const nextPage = this.state.page;
 
     if (prevToggleClearStartPage !== nextToggleClearStartPage) {
       this.setState({ status: Status.IDLE });
     }
 
-    if (prevmodalImage !== nextmodalImage) {
-      return;
-    }
-
     if (prevSearchQuerry !== nextSearchQuerry) {
       this.setState({
-        status: Status.PENDING,
-        page: 1,
+        page: 1, //searchBar
+        images: [], // searchBar
         isClickButtonLoadMore: false,
       });
 
@@ -70,36 +63,43 @@ class ImagesView extends Component {
         return;
       }
 
-      imageAPI(nextSearchQuerry, 1)
-        .then((images) => this.setState({ images, status: Status.RESOLVED }))
-        .catch((error) => this.setState({ error, status: Status.REJECTED }));
+      this.fetchImages(nextSearchQuerry, 1);
     }
 
-    if (nextpage === 1) {
+    if (nextPage === 1) {
       return;
     }
 
-    if (prevPage !== nextpage) {
-      this.setState({ status: Status.PENDING, isClickButtonLoadMore: true });
+    if (prevPage !== nextPage) {
+      this.setState({
+        isClickButtonLoadMore: true,
+      });
 
-      imageAPI(prevSearchQuerry, nextpage)
-        .then((images) => {
-          this.setState({
-            images: [...prevImages, ...images],
-            status: Status.RESOLVED,
-          });
-          this.scroll();
-        })
-        .catch((error) =>
-          this.setState({
-            images: [],
-            error: {
-              message: 'Sorry, no more pictures ...',
-              status: Status.REJECTED,
-            },
-          })
-        );
+      this.fetchImages(prevSearchQuerry, nextPage);
     }
+  }
+
+  fetchImages(searchQuerry, page) {
+    this.setState({
+      status: Status.PENDING,
+    });
+
+    imageAPI(searchQuerry, page)
+      .then((images) => {
+        this.setState((prevState) => ({
+          images: [...prevState.images, ...images],
+          status: Status.RESOLVED,
+        }));
+        this.scroll();
+      })
+      .catch((error) =>
+        this.setState({
+          error: {
+            message: 'Sorry, no more pictures ...',
+          },
+          status: Status.REJECTED,
+        })
+      );
   }
 
   scroll() {
